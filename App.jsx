@@ -1,47 +1,86 @@
-import { useState } from 'react';
-import './App.css';
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+// import './App.css'
+
+// function App() {
+//   const [count, setCount] = useState(0)
+
+//   return (
+//     <>
+//       <div>
+//         <a href="https://vitejs.dev" target="_blank">
+//           <img src={viteLogo} className="logo" alt="Vite logo" />
+//         </a>
+//         <a href="https://react.dev" target="_blank">
+//           <img src={reactLogo} className="logo react" alt="React logo" />
+//         </a>
+//       </div>
+//       <h1>Vite + React</h1>
+//       <div className="card">
+//         <button onClick={() => setCount((count) => count + 1)}>
+//           count is {count}
+//         </button>
+//         <p>
+//           Edit <code>src/App.jsx</code> and save to test HMR
+//         </p>
+//       </div>
+//       <p className="read-the-docs">
+//         Click on the Vite and React logos to learn more
+//       </p>
+//     </>
+//   )
+// }
+
+// export default App
+
+
+
+import { useState, useEffect } from 'react';
+import './App.css'
 
 function App() {
+  const [data, setData] = useState([]);
 
-  const [name, setName] = useState("");
-  const [check, setcheck] = useState("false");
-  const [learn, setLearn] = useState("");
-  function getPrevent(e) {
-    e.preventDefault()
-    if (name === "" || learn === "" || !check) {
-      alert("Fill up the require fields");
-      return;
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+      const jsonData = await response.json();
+      setData(jsonData);
     }
-    console.log(`${name} is learning ${learn} and this is ${check}.`);
-  }
+    fetchData();
+  }, []);
+
   return (
-    <div>
-      <p className='p-3 underline'>
-        From Handling
-      </p>
-      <form onSubmit={getPrevent}>
-        <input type='text' placeholder='Name' className='bg-white p-2 rounded' value={name} onChange={(e) => setName(e.target.value)} />
-        <br /><br />
-        <select onChange={(e) => setLearn(e.target.value)} className='py-3 px-4'>
-          <option>Select any one</option>
-          <option>Angular</option>
-          <option>Vue</option>
-          <option>React</option>
-        </select>
-        <br /><br />
-        <div className='p-3 bg-slate-700 rounded-sm'>
-          <input type="checkbox" onChange={(e) => setcheck(e.target.checked)} />
-          <span className='pl-2'>
-            Obey all rules and regulation
-          </span>
-        </div>
-        <br /><br />
-        <button type='submit' className='bg-slate-900 px-5 py-2'>
-          Submit
-        </button>
-      </form>
-    </div>
-  )
+    <>
+      <h1 className="text-3xl font-bold underline">
+        Fetch API Project
+      </h1>
+      <table className=''>
+        {/* <thead>
+          <tr>
+            <th className="w-20">User Id</th>
+            <th className="w-30">Title</th>
+            <th className="w-40">Body</th>
+          </tr>
+        </thead> */}
+        {data.map(user => (
+          <p key={user.id}>
+            <td className=' truncate' >
+              {user.userId}
+            </td>
+            <td className=' bg-gray-200 m-2 truncate'>
+              {user.title}
+            </td>
+            <td className=' bg-gray-200 m-2 truncate'>
+              ({user.body})
+            </td>
+          </p>
+        ))}
+      </table>
+    </>
+  );
 }
 
-export default App
+export default App;
+
